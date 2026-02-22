@@ -1,4 +1,5 @@
 name: Build and Push Backend Image to Docker Hub
+run-name: "${{github.actor}} is running for ECS"
 
 on:
   push:
@@ -23,8 +24,8 @@ jobs:
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: ./backend
-          file: ./backend/Dockerfile
+          context: backend
+          file: backend/Dockerfile
           push: true
           tags: |
               muraly26/node-image-app:latest
