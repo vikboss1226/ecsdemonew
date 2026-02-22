@@ -1,0 +1,91 @@
+name: React App Deployment
+run-name: ${{ github.actor }} React Deployment 🚀
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci 
+
+      - name: Perform NPM Test 
+        run: npm test -- --watchAll=false
+
+  build-job:
+    needs: test-job
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Perform NPM Build 
+        run: npm run build
+
+      - name: Show build folder structure
+        run: |
+          echo "Root directory:"
+          ls -la
+
+          echo "Inside build folder:"
+          ls -la build
+
+          echo "Recursive view:"
+          ls -R build
+
+   
+      - name: Upload Build Folder Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: react-build
+          path: build/
+
+  deploy-job:
+    needs: build-job
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+      contents: read
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: react-build
+          path: build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

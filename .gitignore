@@ -1,0 +1,19 @@
+ 
+**/node_modules/
+frontend/build/
+.env
+
+# Environment variables
+.env
+.env.*
+
+# Logs
+*.log
+logs/
+
+# Docker
+docker-compose.override.yml
+
+# OS files
+.DS_Store
+Thumbs.db
