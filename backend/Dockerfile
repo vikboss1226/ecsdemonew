@@ -5,5 +5,5 @@ COPY . .
 COPY package*.json ./
 RUN npm ci
 
-EXPOSE 8000
+EXPOSE 5000
 CMD ["npm", "start"]
