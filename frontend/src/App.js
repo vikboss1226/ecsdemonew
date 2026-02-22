@@ -20,7 +20,7 @@ function App() {
         setLoading(false);
       })
       .catch((err) => {
-        console.error('Error fetching jokes2:', err);
+        console.error('Error fetching jokes22:', err);
         setLoading(false);
       });
   }, [API_URL]);
