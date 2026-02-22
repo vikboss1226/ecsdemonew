@@ -24,9 +24,9 @@ jobs:
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: backend
-          file: backend/Dockerfile
+          context: ./backend
+          file: ./backend/Dockerfile
           push: true
           tags: |
               muraly26/node-image-app:latest
-              muraly26/node-image-app:${{ github.run_number }}
+              muraly26/node-image-app:V.1.0.${{ github.run_number }}
