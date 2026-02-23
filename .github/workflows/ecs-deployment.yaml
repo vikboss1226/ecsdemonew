@@ -112,10 +112,9 @@ jobs:
           image: muraly26/react-image-app:latest
 
        # Deploy
-      - name: Deploy to ECS Service
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.render-frontend.outputs.task-definition }}
-          service: gittask-service-ftwd9yhj
-          cluster: git-cluster
-          wait-for-service-stability: true
+      - name: Force ECS Deployment
+        run: |
+            aws ecs update-service \
+              --cluster git-cluster \
+              --service gittask-service-ftwd9yhj \
+              --force-new-deployment
