@@ -75,13 +75,7 @@ jobs:
       - build-node-image
       - build-react-image
 
-    permissions:
-      id-token: write
-      contents: read
-
     steps:
-      - uses: actions/checkout@v4
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -89,33 +83,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Test AWS Login
-        run: aws sts get-caller-identity
-
-      
-      # Update backend image
-      - name: Render backend container
-        id: render-backend
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: task-definition.json
-          container-name: nodecontainer
-          image: muraly26/node-image-app:latest
-
-      # Update frontend image
-      - name: Render frontend container
-        id: render-frontend
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: ${{ steps.render-backend.outputs.task-definition }}
-          container-name: reactcontainer
-          image: muraly26/react-image-app:latest
-
-       # Deploy
       - name: Force ECS Deployment
         run: |
           aws ecs update-service \
             --cluster git-cluster \
             --service gittask-service-ftwd9yhj \
             --force-new-deployment
- 
+  
