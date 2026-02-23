@@ -8,7 +8,7 @@ function App() {
   const [file, setFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
 
-  // Use environment variable for API URL
+  // Use environment variable for API URLtest
   const API_URL = process.env.REACT_APP_API_URL;
 
   // Fetch jokes on component mount
