@@ -68,6 +68,9 @@ jobs:
       
   job-aws-login:
     runs-on: ubuntu-latest
+    needs: 
+      - build-node-image 
+      - build-react-image
     permissions:
       id-token: write
       contents: read
@@ -78,8 +81,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS }}
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS: ${{ secrets.AWS_SECRET_ACCESS }}
           aws-region: us-east-1
 
       - name: Test AWS Login
