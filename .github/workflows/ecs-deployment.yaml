@@ -114,7 +114,8 @@ jobs:
        # Deploy
       - name: Force ECS Deployment
         run: |
-            aws ecs update-service \
-              --cluster git-cluster \
-              --service gittask-service-ftwd9yhj \
-              --force-new-deployment
+          aws ecs update-service \
+            --cluster git-cluster \
+            --service gittask-service-ftwd9yhj \
+            --force-new-deployment
+ 
