@@ -64,3 +64,23 @@ jobs:
             tags: |
               muraly26/react-image-app:latest
               muraly26/react-image-app:v1.0.${{ github.run_number }}
+      
+      
+  job-aws-login:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS }}
+          aws-region: us-east-1
+
+      - name: Test AWS Login
+        run: aws sts get-caller-identity
