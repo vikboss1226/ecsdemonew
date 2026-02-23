@@ -69,7 +69,7 @@ jobs:
             muraly26/react-image-app:v1.0.${{ github.run_number }}
 
 
-  job-aws-login:
+  deploy-to-ecs:
     runs-on: ubuntu-latest
     needs:
       - build-node-image
@@ -80,6 +80,8 @@ jobs:
       contents: read
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -89,3 +91,31 @@ jobs:
 
       - name: Test AWS Login
         run: aws sts get-caller-identity
+
+      
+      # Update backend image
+      - name: Render backend container
+        id: render-backend
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: nodecontainer
+          image: muraly26/node-image-app:latest
+
+      # Update frontend image
+      - name: Render frontend container
+        id: render-frontend
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ steps.render-backend.outputs.task-definition }}
+          container-name: reactcontainer
+          image: muraly26/react-image-app:latest
+
+       # Deploy
+      - name: Deploy to ECS Service
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.render-frontend.outputs.task-definition }}
+          service: gittask-service-ftwd9yhj
+          cluster: git-cluster
+          wait-for-service-stability: true

@@ -62,7 +62,7 @@ async function startServer() {
     // Routes
 
     // Default route
-    app.get('/', (req, res) => res.send('Hello World 222'));
+    app.get('/', (req, res) => res.send('Hellow world CICD ECS '));
 
     // Test route
     app.get('/test', (req, res) => res.send('Hello Test 2'));
